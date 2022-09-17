@@ -5,21 +5,74 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-class Star extends PositionComponent {
+class StarComponent extends PositionComponent
+    with HasGameRef<GravityPlayground> {
   Vector2 speed = Vector2.zero();
   bool isFixed = false;
   double mass = 1.0;
   Color color = Colors.blue;
 
   List<Vector2> tail = [];
+
+  @override
+  void update(double dt) {
+    if (isFixed) return;
+    var acc = Vector2.zero();
+    for (final star in gameRef.children) {
+      if (star == this) continue;
+      if (star is! StarComponent) continue;
+
+      final dir = star.position - position;
+      final normDir = dir.normalized();
+
+      final r = position.distanceTo(star.position);
+
+      if (r < 1) continue;
+
+      final G = star.mass / mass;
+      final f = 0.1 * G * (mass * star.mass) / (r * r);
+
+      final attraction = normDir * f;
+      acc += attraction;
+    }
+
+    speed += acc;
+
+    tail.add(Vector2(position.x, position.y));
+    if (tail.length > 120) {
+      tail.removeAt(0);
+    }
+    position += speed * dt;
+  }
+
+  @override
+  void render(Canvas canvas) {
+    final paint = Paint()..color = color;
+
+    for (int i = 0; i < tail.length - 1; i++) {
+      final p1 = Offset(-position.x, -position.y) + Offset(tail[i].x, tail[i].y);
+      final p2 = Offset(-position.x, -position.y) + Offset(tail[i + 1].x, tail[i + 1].y);
+      canvas.drawLine(p1, p2, paint);
+    }
+
+    canvas.drawOval(
+      Rect.fromLTWH(
+        -size.x / 2,
+        -size.y / 2,
+        size.x,
+        size.y,
+      ),
+      paint,
+    );
+  }
 }
 
-class GravityPlayground extends Game with PanDetector {
-  Star? _newStar;
+class GravityPlayground extends FlameGame with PanDetector {
+  StarComponent? _newStar;
 
   @override
   void onPanDown(DragDownInfo info) {
-    _newStar = Star()
+    _newStar = StarComponent()
       ..position =
           Vector2(info.raw.globalPosition.dx, info.raw.globalPosition.dy)
       ..size = Vector2(25, 25)
@@ -38,23 +91,15 @@ class GravityPlayground extends Game with PanDetector {
 
   @override
   void onPanEnd(DragEndInfo info) {
-    _stars.add(_newStar!);
+    add(_newStar!);
     _newStar = null;
     super.onPanEnd(info);
   }
 
-  final List<Star> _stars = [];
-
   @override
   Future<void>? onLoad() {
-    _stars.add(
-      Star()
-        ..position = Vector2(100, 100)
-        ..size = Vector2(50, 50)
-        ..speed = Vector2(25, 0),
-    );
-    _stars.add(
-      Star()
+    add(
+      StarComponent()
         ..position = Vector2(0.35 * size.x, 0.65 * size.y)
         ..size = Vector2(80, 80)
         ..isFixed = true
@@ -62,19 +107,22 @@ class GravityPlayground extends Game with PanDetector {
         ..color = Colors.yellow,
     );
 
-    _stars.add(
-      Star()
+    add(
+      StarComponent()
         ..position = Vector2(0.65 * size.x, 0.35 * size.y)
         ..size = Vector2(80, 80)
         ..isFixed = true
         ..mass = 1000.0
         ..color = Colors.yellow,
     );
+
     return super.onLoad();
   }
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
+
     final paint = Paint();
 
     // Draw new star
@@ -91,60 +139,6 @@ class GravityPlayground extends Game with PanDetector {
             _newStar!.size.y,
           ),
           paint);
-    }
-
-    for (final star in _stars) {
-      paint.color = star.color;
-
-      for(int i = 0; i < star.tail.length-1; i++){
-          final p1 = Offset(star.tail[i].x, star.tail[i].y);
-          final p2 = Offset(star.tail[i+1].x, star.tail[i+1].y);
-          canvas.drawLine(p1, p2, paint);
-      }
-
-      canvas.drawOval(
-          Rect.fromLTWH(
-            star.position.x - star.size.x / 2,
-            star.position.y - star.size.y / 2,
-            star.size.x,
-            star.size.y,
-          ),
-          paint);
-    }
-  }
-
-  @override
-  void update(double dt) {
-    for (final star in _stars) {
-      if (star.isFixed) continue;
-
-      var acc = Vector2.zero();
-      for (final oStar in _stars) {
-        if (oStar == star) continue;
-
-        final dir = oStar.position - star.position;
-        final normDir = dir.normalized();
-
-        final r = star.position.distanceTo(oStar.position);
-
-        if (r < 1) continue;
-
-        final G = oStar.mass / star.mass;
-        final f = 0.1 * G * (star.mass * oStar.mass) / (r * r);
-
-        final attraction = normDir * f;
-        acc += attraction;
-      }
-
-      star.speed += acc;
-    }
-
-    for (final star in _stars) {
-      star.tail.add(Vector2(star.position.x, star.position.y));
-      if(star.tail.length > 120){
-          star.tail.removeAt(0);
-      }
-      star.position += star.speed * dt;
     }
   }
 }
