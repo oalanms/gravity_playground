@@ -81,11 +81,11 @@ class StarComponent extends PositionComponent
         final debri = StarComponent()
           ..color = color
           ..position =
-              position + rotatedDirection * Random().nextDouble() * size.x / 2
+              position - direction * size.x / 4 + rotatedDirection * Random().nextDouble() * size.x / 2
           ..speed = (rotatedDirection).normalized() *
               Random().nextDouble() *
               (speed.x.abs() + speed.y.abs())
-          ..size = size / (pieces.toDouble() / 4)
+          ..size = size / (pieces.toDouble() / 6)
           ..starStatus = StarStatus.debris;
 
         if (debri.distance(other) > debri.size.x / 2 + other.size.x / 2) {
