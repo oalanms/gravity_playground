@@ -64,7 +64,7 @@ class StarComponent extends PositionComponent
     // Debris collided with another star
     if (starStatus == StarStatus.debris) {
       other.mass += mass;
-      other.size += size * 0.1;
+      other.size += size * 0.01;
 
       other._updateHitBox();
       removeFromParent();
