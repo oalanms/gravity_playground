@@ -55,7 +55,7 @@ class MainMenuState extends State<MainMenu> {
             padding: const EdgeInsets.all(8.0),
             child: Slider(
               value: widget.game.playbackSpeed,
-              label: "${widget.game.playbackSpeed.toInt()}x",
+              label: "${widget.game.playbackSpeed}x",
               onChanged: (v) {
                 setState(() {
                   widget.game.playbackSpeed = v;
@@ -70,7 +70,7 @@ class MainMenuState extends State<MainMenu> {
             padding: const EdgeInsets.all(8.0),
             child: Slider(
               value: widget.game.attraction,
-              label: "${widget.game.attraction.toInt()}x",
+              label: "${widget.game.attraction}x",
               onChanged: (v) {
                 setState(() {
                   widget.game.attraction = v;
