@@ -22,7 +22,7 @@ class GravityPlayground extends Game with PanDetector {
     _newStar = Star()
       ..position =
           Vector2(info.raw.globalPosition.dx, info.raw.globalPosition.dy)
-      ..size = Vector2(40, 40)
+      ..size = Vector2(25, 25)
       ..color = Colors.primaries[Random().nextInt(Colors.primaries.length)];
     super.onPanDown(info);
   }
