@@ -12,31 +12,6 @@ class GravityPlaygroundGame extends FlameGame
   double playbackSpeed = 1.0;
 
   @override
-  void onPanDown(DragDownInfo info) {
-    _newStar = StarComponent()
-      ..position = Vector2(info.raw.localPosition.dx, info.raw.localPosition.dy)
-      ..size = Vector2(25, 25)
-      ..color = Colors.primaries[Random().nextInt(Colors.primaries.length)];
-    super.onPanDown(info);
-  }
-
-  @override
-  void onPanUpdate(DragUpdateInfo info) {
-    final clickPosition =
-        Vector2(info.raw.localPosition.dx, info.raw.localPosition.dy);
-
-    _newStar!.speed = _newStar!.position - clickPosition;
-    super.onPanUpdate(info);
-  }
-
-  @override
-  void onPanEnd(DragEndInfo info) {
-    add(_newStar!);
-    _newStar = null;
-    super.onPanEnd(info);
-  }
-
-  @override
   Future<void>? onLoad() {
     // debugMode = true;
     add(
@@ -61,12 +36,44 @@ class GravityPlaygroundGame extends FlameGame
   }
 
   @override
+  void onPanDown(DragDownInfo info) {
+    _newStar = StarComponent()
+      ..position = Vector2(info.raw.localPosition.dx, info.raw.localPosition.dy)
+      ..size = Vector2(25, 25)
+      ..color = Colors.primaries[Random().nextInt(Colors.primaries.length)];
+    super.onPanDown(info);
+  }
+
+  @override
+  void onPanUpdate(DragUpdateInfo info) {
+    final clickPosition =
+        Vector2(info.raw.localPosition.dx, info.raw.localPosition.dy);
+
+    _newStar!.speed = _newStar!.position - clickPosition;
+    super.onPanUpdate(info);
+  }
+
+  @override
+  void onPanCancel() {
+    add(_newStar!);
+    _newStar = null;
+    super.onPanCancel();
+  }
+
+  @override
+  void onPanEnd(DragEndInfo info) {
+    add(_newStar!);
+    _newStar = null;
+    super.onPanEnd(info);
+  }
+
+  @override
   void render(Canvas canvas) {
     super.render(canvas);
 
     final paint = Paint();
 
-    // Draw new star
+    // Draw new star if it's being created
     if (_newStar != null) {
       paint.color = _newStar!.color;
       final p1 = _newStar!.position - _newStar!.speed;

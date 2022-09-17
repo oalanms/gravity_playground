@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/geometry.dart';
 import 'package:flutter/material.dart';
 import 'package:gravity_playground/gp/gravity_playground_game.dart';
 
@@ -34,31 +33,40 @@ class StarComponent extends PositionComponent
   // Star position status
   StarStatus starStatus = StarStatus.free;
 
-  CircleHitbox hitbox = CircleHitbox(radius: 0.0);
+  CircleHitbox _hitbox = CircleHitbox(radius: 0.0);
 
-  void updateHitBox() {
-    hitbox.removeFromParent();
-    hitbox = CircleHitbox(
+  @override
+  Future<void>? onLoad() {
+    anchor = Anchor.center;
+
+    _updateHitBox();
+    return super.onLoad();
+  }
+
+  void _updateHitBox() {
+    _hitbox.removeFromParent();
+    _hitbox = CircleHitbox(
       position: Vector2.zero(),
       radius: size.x / 2,
     );
 
-    add(hitbox);
+    add(_hitbox);
   }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if (starStatus == StarStatus.fixed) return;
-    if (other is! StarComponent) return;
-    if (other.starStatus == StarStatus.debris) return;
-    if (other.parent == null) return;
+    if (starStatus == StarStatus.fixed ||
+        other is! StarComponent ||
+        other.starStatus == StarStatus.debris ||
+        other.parent == null) return;
 
+    // Debris collided with another star
     if (starStatus == StarStatus.debris) {
       other.mass += mass;
       other.size += size * 0.1;
 
-      other.updateHitBox();
+      other._updateHitBox();
       removeFromParent();
       return;
     }
@@ -70,24 +78,39 @@ class StarComponent extends PositionComponent
       removeFromParent();
       for (int i = 0; i < pieces; i++) {
         final direction = speed.normalized();
+
+        // Angle gap to be used in random
         const diff = 3.14 / 8;
+
+        // We rotate 90 degrees (pi / 4) and -90 degrees (-pi / 4)
+        // This is the direction that the debris will move
+        // To make it look better, we add a random variation to this angle. This is `diff`.
         final rightAngle = 3.14 / 4 + Random().nextDouble() * 2 * diff - diff;
         final leftAngle = -3.14 / 4 + Random().nextDouble() * -2 * diff + diff;
 
+        // Choose one of the two angles randomly
         final angle = Random().nextBool() ? rightAngle : leftAngle;
 
+        // Rotates the direction of the star by the chosen angle
         final rotatedDirection = direction..rotate(angle);
 
+        final debriPosition = position -
+            direction * size.x / 4 +
+            rotatedDirection * Random().nextDouble() * size.x / 2;
+
+        final debriSpeed = (rotatedDirection).normalized() *
+            Random().nextDouble() *
+            (speed.x.abs() + speed.y.abs());
+
+        // Create the debris element
         final debri = StarComponent()
           ..color = color
-          ..position =
-              position - direction * size.x / 4 + rotatedDirection * Random().nextDouble() * size.x / 2
-          ..speed = (rotatedDirection).normalized() *
-              Random().nextDouble() *
-              (speed.x.abs() + speed.y.abs())
+          ..position = debriPosition
+          ..speed = debriSpeed
           ..size = size / (pieces.toDouble() / 6)
           ..starStatus = StarStatus.debris;
 
+        // Only add the debri if it's not colliding with the planet
         if (debri.distance(other) > debri.size.x / 2 + other.size.x / 2) {
           parent!.add(debri);
         }
@@ -96,25 +119,17 @@ class StarComponent extends PositionComponent
   }
 
   @override
-  Future<void>? onLoad() {
-    anchor = Anchor.center;
-
-    updateHitBox();
-    return super.onLoad();
-  }
-
-  @override
   void update(double dt) {
     dt *= gameRef.playbackSpeed;
     currentTime += dt;
+
     super.update(dt);
 
     if (starStatus == StarStatus.fixed) return;
 
     // Calculate gravity attraction from other stars
     for (final star in gameRef.children) {
-      if (star is! StarComponent) continue;
-      if (star == this) continue;
+      if (star is! StarComponent || star == this) continue;
 
       final distSquared = position.distanceToSquared(star.position);
       if (distSquared < 1) continue;
@@ -127,6 +142,7 @@ class StarComponent extends PositionComponent
       speed += attractionDirection * attractionForce * dt;
     }
 
+    // Only free-roaming stars have a tail
     if (starStatus == StarStatus.free) {
       final tailItem = TailItem(Vector2(position.x, position.y), currentTime);
       tail.add(tailItem);
@@ -135,6 +151,7 @@ class StarComponent extends PositionComponent
       tail.removeWhere((element) => element.timestamp < currentTime - 2);
     }
 
+    // Apply speed
     position += speed * dt;
   }
 
