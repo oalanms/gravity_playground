@@ -39,12 +39,10 @@ class HomePageState extends State<HomePage> {
       ),
       body: Stack(
         children: [
-          Expanded(
-            child: InteractiveViewer(
-              minScale: 0.001,
-              maxScale: 10.0,
-              child: GameWidget(game: _game),
-            ),
+          InteractiveViewer(
+            minScale: 0.001,
+            maxScale: 10.0,
+            child: GameWidget(game: _game),
           ),
           Align(
             alignment: Alignment.bottomCenter,

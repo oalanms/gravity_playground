@@ -44,7 +44,7 @@ class GravityPlaygroundGame extends FlameGame
         ..position = Vector2(0.35 * size.x, 0.65 * size.y)
         ..size = Vector2(80, 80)
         ..starStatus = StarStatus.fixed
-        ..mass = 1000.0
+        ..mass = 2000.0
         ..color = Colors.yellow,
     );
 
@@ -53,7 +53,7 @@ class GravityPlaygroundGame extends FlameGame
         ..position = Vector2(0.65 * size.x, 0.35 * size.y)
         ..size = Vector2(80, 80)
         ..starStatus = StarStatus.fixed
-        ..mass = 1000.0
+        ..mass = 2000.0
         ..color = Colors.yellow,
     );
 
