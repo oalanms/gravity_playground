@@ -62,8 +62,8 @@ class MainMenuState extends State<MainMenu> {
                 });
               },
               min: 0.01,
-              max: 10.0,
-              divisions: 100,
+              max: 5.0,
+              divisions: 50,
             ),
           ),
           Padding(
