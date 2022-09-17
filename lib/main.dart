@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -21,7 +23,7 @@ class GravityPlayground extends Game with PanDetector {
       ..position =
           Vector2(info.raw.globalPosition.dx, info.raw.globalPosition.dy)
       ..size = Vector2(40, 40)
-      ..color = Colors.red;
+      ..color = Colors.primaries[Random().nextInt(Colors.primaries.length)];
     super.onPanDown(info);
   }
 
