@@ -66,6 +66,21 @@ class MainMenuState extends State<MainMenu> {
               divisions: 20,
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Slider(
+              value: widget.game.attraction,
+              label: "${widget.game.attraction.toInt()}x",
+              onChanged: (v) {
+                setState(() {
+                  widget.game.attraction = v;
+                });
+              },
+              min: 0.1,
+              max: 1.0,
+              divisions: 10,
+            ),
+          ),
         ],
       ),
     );

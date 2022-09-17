@@ -137,7 +137,7 @@ class StarComponent extends PositionComponent
       final attractionDirection = (star.position - position).normalized();
 
       final G = star.mass / mass;
-      final attractionForce = G * (mass * star.mass) / (distSquared);
+      final attractionForce = gameRef.attraction * G * (mass * star.mass) / (distSquared);
 
       speed += attractionDirection * attractionForce * dt;
     }
