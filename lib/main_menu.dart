@@ -77,8 +77,8 @@ class MainMenuState extends State<MainMenu> {
                 });
               },
               min: 0.1,
-              max: 1.0,
-              divisions: 10,
+              max: 4.0,
+              divisions: 40,
             ),
           ),
         ],
