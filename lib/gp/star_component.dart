@@ -142,7 +142,7 @@ class StarComponent extends PositionComponent
       if (star is! StarComponent || star == this) continue;
 
       final distSquared = position.distanceToSquared(star.position);
-      if(sqrt(distSquared) <= (star.size.x * size.x)) continue;
+      if(distSquared <= star.size.x * size.x) continue;
 
       final attractionDirection = (star.position - position).normalized();
 
