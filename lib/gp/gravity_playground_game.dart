@@ -46,8 +46,9 @@ class GravityPlaygroundGame extends FlameGame
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    final clickPosition =
-        Vector2(info.raw.localPosition.dx, info.raw.localPosition.dy);
+    if (_newStar == null) return;
+    final localPosition = info.raw.localPosition;
+    final clickPosition = Vector2(localPosition.dx, localPosition.dy);
 
     _newStar!.speed = _newStar!.position - clickPosition;
     super.onPanUpdate(info);
@@ -70,12 +71,9 @@ class GravityPlaygroundGame extends FlameGame
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-
-    final paint = Paint();
-
     // Draw new star if it's being created
     if (_newStar != null) {
-      paint.color = _newStar!.color;
+      final paint = Paint()..color = _newStar!.color;
       final p1 = _newStar!.position - _newStar!.speed;
       final p2 = _newStar!.position;
       canvas.drawLine(Offset(p1.x, p1.y), Offset(p2.x, p2.y), paint);

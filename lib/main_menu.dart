@@ -30,11 +30,12 @@ class MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.grey.shade500.withOpacity(0.3),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(8.0),
-            topRight: Radius.circular(8.0),
-          )),
+        color: Colors.grey.shade500.withOpacity(0.3),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(8.0),
+          topRight: Radius.circular(8.0),
+        ),
+      ),
       height: 0.05 * MediaQuery.of(context).size.height,
       width: 0.4 * MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(8.0),
@@ -63,7 +64,7 @@ class MainMenuState extends State<MainMenu> {
               },
               min: 0.1,
               max: 2.0,
-              divisions: 19,
+              divisions: 21,
             ),
           ),
           Padding(
@@ -78,7 +79,7 @@ class MainMenuState extends State<MainMenu> {
               },
               min: 0.1,
               max: 2.0,
-              divisions: 19,
+              divisions: 21,
             ),
           ),
         ],
