@@ -98,13 +98,11 @@ class StarComponent extends PositionComponent
         // Rotates the direction of the star by the chosen angle
         final rotatedDirection = direction..rotate(angle);
 
-        final debriPosition = other.position -
-            speed.normalized() * other.size.y -
+        final debriPosition = position - speed.normalized() * size.y -
             direction * size.x / 2 +
-            rotatedDirection *
-                ((Random().nextDouble() * size.x / 2) + size.x / 2);
+            rotatedDirection * ((Random().nextDouble() * size.x / 2) + size.x / 2);
 
-        final debriSpeed = rotatedDirection.normalized() * 0.4 * min(speed.x.abs(), speed.y.abs());
+        final debriSpeed = (rotatedDirection).normalized() * 0.5 * (max(speed.x.abs(), speed.y.abs()));
 
         // Create the debris element
         final debri = StarComponent()
@@ -129,11 +127,11 @@ class StarComponent extends PositionComponent
     dt *= gameRef.playbackSpeed;
     currentTime += dt;
 
-    if (currentTime - lastFrame < 1 / 12000) return;
+    if(currentTime - lastFrame < 1 / 1200) return;
     lastFrame = 0;
 
     super.update(dt);
-
+    
     // Apply speed
     position += speed * dt;
 
@@ -144,13 +142,12 @@ class StarComponent extends PositionComponent
       if (star is! StarComponent || star == this) continue;
 
       final distSquared = position.distanceToSquared(star.position);
-      if (distSquared <= size.x * size.x) continue;
+      if(distSquared <= size.x * size.x) continue;
 
       final attractionDirection = (star.position - position).normalized();
 
       const G = 9.67;
-      final attractionForce =
-          gameRef.attraction * G * (mass * star.mass) / (distSquared);
+      final attractionForce = gameRef.attraction * G * (mass * star.mass) / (distSquared);
 
       speed += attractionDirection * attractionForce * dt;
     }
@@ -163,6 +160,7 @@ class StarComponent extends PositionComponent
       // Keep tail to the last 2 seconds
       tail.removeWhere((element) => element.timestamp < currentTime - 2);
     }
+
   }
 
   @override
