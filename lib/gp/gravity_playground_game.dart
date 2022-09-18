@@ -16,7 +16,7 @@ class GravityPlaygroundGame extends FlameGame
     // debugMode = true;
     add(
       StarComponent()
-        ..position = Vector2(0.35 * size.x, 0.5 * size.y)
+        ..position = Vector2(0.25 * size.x, 0.5 * size.y)
         ..size = Vector2(50, 50)
         ..starStatus = StarStatus.fixed
         ..mass = 300000.0
@@ -25,7 +25,7 @@ class GravityPlaygroundGame extends FlameGame
 
     add(
       StarComponent()
-        ..position = Vector2(0.65 * size.x, 0.5 * size.y)
+        ..position = Vector2(0.75 * size.x, 0.5 * size.y)
         ..size = Vector2(50, 50)
         ..starStatus = StarStatus.fixed
         ..mass = 300000.0
