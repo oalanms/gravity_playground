@@ -61,9 +61,9 @@ class MainMenuState extends State<MainMenu> {
                   widget.game.playbackSpeed = v;
                 });
               },
-              min: 0.01,
-              max: 5.0,
-              divisions: 50,
+              min: 0.1,
+              max: 2.0,
+              divisions: 19,
             ),
           ),
           Padding(
@@ -76,9 +76,9 @@ class MainMenuState extends State<MainMenu> {
                   widget.game.attraction = v;
                 });
               },
-              min: 0.01,
-              max: 10.0,
-              divisions: 100,
+              min: 0.1,
+              max: 2.0,
+              divisions: 19,
             ),
           ),
         ],

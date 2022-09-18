@@ -8,7 +8,7 @@ import 'package:gravity_playground/gp/star_component.dart';
 class GravityPlaygroundGame extends FlameGame
     with HasCollisionDetection, PanDetector {
   StarComponent? _newStar;
-  double attraction = 0.4;
+  double attraction = 1.0;
   double playbackSpeed = 1.0;
 
   @override
