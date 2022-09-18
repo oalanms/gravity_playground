@@ -17,7 +17,7 @@ class GravityPlaygroundGame extends FlameGame
     add(
       StarComponent()
         ..position = Vector2(0.35 * size.x, 0.5 * size.y)
-        ..size = Vector2(30, 30)
+        ..size = Vector2(50, 50)
         ..starStatus = StarStatus.fixed
         ..mass = 300000.0
         ..color = Colors.yellow,
@@ -26,7 +26,7 @@ class GravityPlaygroundGame extends FlameGame
     add(
       StarComponent()
         ..position = Vector2(0.65 * size.x, 0.5 * size.y)
-        ..size = Vector2(30, 30)
+        ..size = Vector2(50, 50)
         ..starStatus = StarStatus.fixed
         ..mass = 300000.0
         ..color = Colors.yellow,
@@ -35,7 +35,7 @@ class GravityPlaygroundGame extends FlameGame
     add(
       StarComponent()
         ..position = Vector2(0.5 * size.x, 0.35 * size.y)
-        ..size = Vector2(30, 30)
+        ..size = Vector2(50, 50)
         ..starStatus = StarStatus.fixed
         ..mass = 300000.0
         ..color = Colors.yellow,
@@ -44,7 +44,7 @@ class GravityPlaygroundGame extends FlameGame
     add(
       StarComponent()
         ..position = Vector2(0.5 * size.x, 0.65 * size.y)
-        ..size = Vector2(30, 30)
+        ..size = Vector2(50, 50)
         ..starStatus = StarStatus.fixed
         ..mass = 300000.0
         ..color = Colors.yellow,
@@ -99,7 +99,6 @@ class GravityPlaygroundGame extends FlameGame
       final sz = _newStar!.size.x;
       canvas.translate(p2.x - sz / 2, p2.y - sz / 2);
       _newStar!.render(canvas);
-      // canvas.translate();
     }
   }
 }

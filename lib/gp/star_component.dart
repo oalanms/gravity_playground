@@ -48,13 +48,13 @@ class StarComponent extends PositionComponent
   }
 
   void _updateHitBox() {
-    final newHitBox = CircleHitbox(
+    _hitbox.removeFromParent();
+    _hitbox = CircleHitbox(
       position: Vector2.zero(),
       radius: size.x / 2,
     );
-    add(newHitBox);
-    _hitbox.removeFromParent();
-    _hitbox = newHitBox;
+
+    add(_hitbox);
   }
 
   @override
@@ -102,7 +102,7 @@ class StarComponent extends PositionComponent
             direction * size.x / 2 +
             rotatedDirection * ((Random().nextDouble() * size.x / 2) + size.x / 2);
 
-        final debriSpeed = (rotatedDirection).normalized() * 0.5 * (max(speed.x.abs(), speed.y.abs()));
+        final debriSpeed = (rotatedDirection).normalized() * (max(speed.x.abs(), speed.y.abs()));
 
         // Create the debris element
         final debri = StarComponent()
