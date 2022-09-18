@@ -104,7 +104,7 @@ class StarComponent extends PositionComponent
             rotatedDirection *
                 ((Random().nextDouble() * size.x / 2) + size.x / 2);
 
-        final debriSpeed = rotatedDirection.normalized() * min(speed.x.abs(), speed.y.abs());
+        final debriSpeed = rotatedDirection.normalized() * 0.4 * min(speed.x.abs(), speed.y.abs());
 
         // Create the debris element
         final debri = StarComponent()
