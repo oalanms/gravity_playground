@@ -107,7 +107,7 @@ class StarComponent extends PositionComponent
           ..color = color
           ..position = debriPosition
           ..speed = debriSpeed
-          ..size = size / (pieces.toDouble() / 6)
+          ..size = size / 2
           ..starStatus = StarStatus.debris;
 
         // Only add the debri if it's not colliding with the planet

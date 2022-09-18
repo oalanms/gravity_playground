@@ -8,7 +8,7 @@ import 'package:gravity_playground/gp/star_component.dart';
 class GravityPlaygroundGame extends FlameGame
     with HasCollisionDetection, PanDetector {
   StarComponent? _newStar;
-  double attraction = 0.5;
+  double attraction = 0.4;
   double playbackSpeed = 1.0;
 
   @override
@@ -16,8 +16,8 @@ class GravityPlaygroundGame extends FlameGame
     // debugMode = true;
     add(
       StarComponent()
-        ..position = Vector2(0.35 * size.x, 0.65 * size.y)
-        ..size = Vector2(40, 40)
+        ..position = Vector2(0.35 * size.x, 0.5 * size.y)
+        ..size = Vector2(30, 30)
         ..starStatus = StarStatus.fixed
         ..mass = 2000.0
         ..color = Colors.yellow,
@@ -25,8 +25,8 @@ class GravityPlaygroundGame extends FlameGame
 
     add(
       StarComponent()
-        ..position = Vector2(0.65 * size.x, 0.35 * size.y)
-        ..size = Vector2(40, 40)
+        ..position = Vector2(0.65 * size.x, 0.5 * size.y)
+        ..size = Vector2(30, 30)
         ..starStatus = StarStatus.fixed
         ..mass = 2000.0
         ..color = Colors.yellow,
@@ -39,7 +39,7 @@ class GravityPlaygroundGame extends FlameGame
   void onPanDown(DragDownInfo info) {
     _newStar = StarComponent()
       ..position = Vector2(info.raw.localPosition.dx, info.raw.localPosition.dy)
-      ..size = Vector2(25, 25)
+      ..size = Vector2(10, 10)
       ..color = Colors.primaries[Random().nextInt(Colors.primaries.length)];
     super.onPanDown(info);
   }
