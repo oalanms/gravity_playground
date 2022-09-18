@@ -37,7 +37,6 @@ class MainMenuState extends State<MainMenu> {
         ),
       ),
       height: 0.05 * MediaQuery.of(context).size.height,
-      width: 0.4 * MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,8 +62,8 @@ class MainMenuState extends State<MainMenu> {
                 });
               },
               min: 0.1,
-              max: 2.0,
-              divisions: 21,
+              max: 3.0,
+              divisions: 31,
             ),
           ),
           Padding(
@@ -78,8 +77,8 @@ class MainMenuState extends State<MainMenu> {
                 });
               },
               min: 0.1,
-              max: 2.0,
-              divisions: 21,
+              max: 3.0,
+              divisions: 31,
             ),
           ),
         ],

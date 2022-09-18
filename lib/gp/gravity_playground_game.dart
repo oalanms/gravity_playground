@@ -19,7 +19,7 @@ class GravityPlaygroundGame extends FlameGame
         ..position = Vector2(0.35 * size.x, 0.5 * size.y)
         ..size = Vector2(30, 30)
         ..starStatus = StarStatus.fixed
-        ..mass = 2000.0
+        ..mass = 300000.0
         ..color = Colors.yellow,
     );
 
@@ -28,9 +28,28 @@ class GravityPlaygroundGame extends FlameGame
         ..position = Vector2(0.65 * size.x, 0.5 * size.y)
         ..size = Vector2(30, 30)
         ..starStatus = StarStatus.fixed
-        ..mass = 2000.0
+        ..mass = 300000.0
         ..color = Colors.yellow,
     );
+
+    add(
+      StarComponent()
+        ..position = Vector2(0.5 * size.x, 0.35 * size.y)
+        ..size = Vector2(30, 30)
+        ..starStatus = StarStatus.fixed
+        ..mass = 300000.0
+        ..color = Colors.yellow,
+    );
+
+    add(
+      StarComponent()
+        ..position = Vector2(0.5 * size.x, 0.65 * size.y)
+        ..size = Vector2(30, 30)
+        ..starStatus = StarStatus.fixed
+        ..mass = 300000.0
+        ..color = Colors.yellow,
+    );
+
 
     return super.onLoad();
   }
@@ -77,14 +96,10 @@ class GravityPlaygroundGame extends FlameGame
       final p1 = _newStar!.position - _newStar!.speed;
       final p2 = _newStar!.position;
       canvas.drawLine(Offset(p1.x, p1.y), Offset(p2.x, p2.y), paint);
-      canvas.drawOval(
-          Rect.fromLTWH(
-            _newStar!.position.x - _newStar!.size.x / 2,
-            _newStar!.position.y - _newStar!.size.y / 2,
-            _newStar!.size.x,
-            _newStar!.size.y,
-          ),
-          paint);
+      final sz = _newStar!.size.x;
+      canvas.translate(p2.x - sz / 2, p2.y - sz / 2);
+      _newStar!.render(canvas);
+      // canvas.translate();
     }
   }
 }
