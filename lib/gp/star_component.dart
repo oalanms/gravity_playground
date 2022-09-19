@@ -30,31 +30,29 @@ class StarComponent extends PositionComponent
   // Tail of the star
   List<TailItem> tail = [];
 
-  // Created at
-  double createdAt = 0;
-
   // Star position status
   StarStatus starStatus = StarStatus.free;
 
-  CircleHitbox _hitbox = CircleHitbox(radius: 0.0);
+  CircleHitbox? _hitbox;
 
   @override
   Future<void>? onLoad() {
     anchor = Anchor.center;
-    createdAt = currentTime;
-
-    _updateHitBox();
+    _addOrUpdateHitbox();
     return super.onLoad();
   }
 
-  void _updateHitBox() {
-    _hitbox.removeFromParent();
+  void _addOrUpdateHitbox() {
+    if (_hitbox != null) {
+      _hitbox!.removeFromParent();
+    }
+
     _hitbox = CircleHitbox(
       position: Vector2.zero(),
-      radius: size.x / 2,
+      radius: size.x / 1.75,
     );
 
-    add(_hitbox);
+    add(_hitbox!);
   }
 
   @override
@@ -70,7 +68,7 @@ class StarComponent extends PositionComponent
       other.mass += mass;
       other.size += size * 0.01;
 
-      other._updateHitBox();
+      other._addOrUpdateHitbox();
       removeFromParent();
       return;
     }
@@ -105,7 +103,7 @@ class StarComponent extends PositionComponent
                 ((Random().nextDouble() * size.x / 2) + size.x / 2);
 
         final debriSpeed = (rotatedDirection).normalized() *
-            (max(speed.x.abs(), speed.y.abs()));
+            ((speed.x.abs() + speed.y.abs()) / 1.50);
 
         // Create the debris element
         final debri = StarComponent()
@@ -128,7 +126,8 @@ class StarComponent extends PositionComponent
   @override
   void update(double dt) {
     // TODO: Check distance to the center instead of to (0,0)
-    if (position.distanceTo(Vector2.zero()) > 2 * (gameRef.size.x + gameRef.size.y)) {
+    if (position.distanceTo(Vector2.zero()) >
+        2 * (gameRef.size.x + gameRef.size.y)) {
       removeFromParent();
       return;
     }
@@ -150,9 +149,11 @@ class StarComponent extends PositionComponent
 
       final attractionDirection = (star.position - position).normalized();
 
-      const G = 9.67;
-      final attractionForce =
+      const G = 12.8;
+      double attractionForce =
           gameRef.attraction * G * (mass * star.mass) / (distSquared);
+
+      // attractionForce = max(0.0000001, min(attractionForce, 10000 * gameRef.size.y + gameRef.size.x));
 
       speed += attractionDirection * attractionForce * dt;
     }
@@ -170,9 +171,7 @@ class StarComponent extends PositionComponent
 
     // Apply speed
     position += speed * dt;
-
     super.update(dt);
-
   }
 
   @override

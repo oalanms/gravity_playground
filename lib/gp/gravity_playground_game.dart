@@ -70,6 +70,8 @@ class GravityPlaygroundGame extends FlameGame
     _newStar!.speed = _newStar!.position - info.eventPosition.viewport;
   }
 
+  // NOT a mistake. If you just tap the screen (and don't drag), it'll add the
+  // star with speed = (0, 0);
   @override
   void onPanCancel() {
     add(_newStar!);
@@ -95,7 +97,7 @@ class GravityPlaygroundGame extends FlameGame
 
     textPaint.render(canvas, "${children.length}", Vector2(50, 50));
 
-    // Draw new star if it's being created
+    // Draw the new star if it's being created
     if (_newStar != null) {
       final paint = Paint()..color = _newStar!.color;
       final p1 = _newStar!.position - _newStar!.speed;
