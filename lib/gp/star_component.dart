@@ -179,6 +179,7 @@ class StarComponent extends PositionComponent
     final paint = Paint()..color = color;
 
     for (int i = 0; i < tail.length - 1; i++) {
+      paint.strokeWidth = i.isEven ? size.x / 4 : size.x / 8;
       final centerOffset =
           Offset(-position.x + size.x / 2, -position.y + size.y / 2);
       final p1 = Offset(tail[i].position.x, tail[i].position.y) + centerOffset;
