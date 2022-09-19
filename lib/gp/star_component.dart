@@ -125,6 +125,17 @@ class StarComponent extends PositionComponent
 
   @override
   void update(double dt) {
+    double t = dt;
+    const step = 0.01;
+    while(t > 0){
+      t -= step;
+      _update(step);
+    }
+
+    super.update(dt);
+  }
+
+  void _update(double dt){
     // TODO: Check distance to the center instead of to (0,0)
     if (position.distanceTo(Vector2.zero()) >
         2 * (gameRef.size.x + gameRef.size.y)) {
@@ -171,7 +182,6 @@ class StarComponent extends PositionComponent
 
     // Apply speed
     position += speed * dt;
-    super.update(dt);
   }
 
   @override
