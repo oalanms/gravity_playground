@@ -14,6 +14,7 @@ class GravityPlaygroundGame extends FlameGame
   @override
   Future<void>? onLoad() {
     // debugMode = true;
+    camera.viewport = FixedResolutionViewport(size);
     add(
       StarComponent()
         ..position = Vector2(0.25 * size.x, 0.5 * size.y)
@@ -50,27 +51,23 @@ class GravityPlaygroundGame extends FlameGame
         ..color = Colors.yellow,
     );
 
-
     return super.onLoad();
   }
 
   @override
   void onPanDown(DragDownInfo info) {
-    _newStar = StarComponent()
-      ..position = Vector2(info.raw.localPosition.dx, info.raw.localPosition.dy)
-      ..size = Vector2(10, 10)
-      ..color = Colors.primaries[Random().nextInt(Colors.primaries.length)];
     super.onPanDown(info);
+    _newStar = StarComponent()
+      ..position = info.eventPosition.viewport
+      ..size = Vector2(15, 15)
+      ..color = Colors.primaries[Random().nextInt(Colors.primaries.length)];
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    if (_newStar == null) return;
-    final localPosition = info.raw.localPosition;
-    final clickPosition = Vector2(localPosition.dx, localPosition.dy);
-
-    _newStar!.speed = _newStar!.position - clickPosition;
     super.onPanUpdate(info);
+    if (_newStar == null) return;
+    _newStar!.speed = _newStar!.position - info.eventPosition.viewport;
   }
 
   @override
@@ -90,15 +87,30 @@ class GravityPlaygroundGame extends FlameGame
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+    TextPaint textPaint = TextPaint(
+      style: const TextStyle(
+        color: Colors.white,
+      ),
+    );
+
+    textPaint.render(canvas, "${children.length}", Vector2(50, 50));
+
     // Draw new star if it's being created
     if (_newStar != null) {
       final paint = Paint()..color = _newStar!.color;
       final p1 = _newStar!.position - _newStar!.speed;
       final p2 = _newStar!.position;
       canvas.drawLine(Offset(p1.x, p1.y), Offset(p2.x, p2.y), paint);
-      final sz = _newStar!.size.x;
-      canvas.translate(p2.x - sz / 2, p2.y - sz / 2);
-      _newStar!.render(canvas);
+
+      canvas.drawOval(
+        Rect.fromLTWH(
+          p2.x - _newStar!.size.x / 2,
+          p2.y - _newStar!.size.y / 2,
+          _newStar!.size.x,
+          _newStar!.size.y,
+        ),
+        paint,
+      );
     }
   }
 }

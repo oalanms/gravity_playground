@@ -98,11 +98,14 @@ class StarComponent extends PositionComponent
         // Rotates the direction of the star by the chosen angle
         final rotatedDirection = direction..rotate(angle);
 
-        final debriPosition = position - speed.normalized() * size.y -
+        final debriPosition = position -
+            speed.normalized() * size.y -
             direction * size.x / 2 +
-            rotatedDirection * ((Random().nextDouble() * size.x / 2) + size.x / 2);
+            rotatedDirection *
+                ((Random().nextDouble() * size.x / 2) + size.x / 2);
 
-        final debriSpeed = (rotatedDirection).normalized() * (max(speed.x.abs(), speed.y.abs()));
+        final debriSpeed = (rotatedDirection).normalized() *
+            (max(speed.x.abs(), speed.y.abs()));
 
         // Create the debris element
         final debri = StarComponent()
@@ -124,16 +127,17 @@ class StarComponent extends PositionComponent
 
   @override
   void update(double dt) {
+    // TODO: Check distance to the center instead of to (0,0)
+    if (position.distanceTo(Vector2.zero()) > 2 * (gameRef.size.x + gameRef.size.y)) {
+      removeFromParent();
+      return;
+    }
+
     dt *= gameRef.playbackSpeed;
     currentTime += dt;
 
-    if(currentTime - lastFrame < 1 / 1200) return;
+    if (currentTime - lastFrame < 1 / 1200) return;
     lastFrame = 0;
-
-    super.update(dt);
-    
-    // Apply speed
-    position += speed * dt;
 
     if (starStatus == StarStatus.fixed) return;
 
@@ -142,12 +146,13 @@ class StarComponent extends PositionComponent
       if (star is! StarComponent || star == this) continue;
 
       final distSquared = position.distanceToSquared(star.position);
-      if(distSquared <= star.size.x * size.x) continue;
+      if (distSquared <= star.size.x * size.x) continue;
 
       final attractionDirection = (star.position - position).normalized();
 
       const G = 9.67;
-      final attractionForce = gameRef.attraction * G * (mass * star.mass) / (distSquared);
+      final attractionForce =
+          gameRef.attraction * G * (mass * star.mass) / (distSquared);
 
       speed += attractionDirection * attractionForce * dt;
     }
@@ -158,8 +163,15 @@ class StarComponent extends PositionComponent
       tail.add(tailItem);
 
       // Keep tail to the last 2 seconds
-      tail.removeWhere((element) => element.timestamp < currentTime - 2);
+      while (tail.isNotEmpty && tail.first.timestamp < currentTime - 2) {
+        tail.removeAt(0);
+      }
     }
+
+    // Apply speed
+    position += speed * dt;
+
+    super.update(dt);
 
   }
 
