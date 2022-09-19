@@ -17,21 +17,21 @@ class GravityPlaygroundGame extends FlameGame
     camera.viewport = FixedResolutionViewport(size);
     add(
       StarComponent()
-        ..position = Vector2(0.5 * size.x, 0.30 * size.y)
+        ..position = Vector2(0.5 * size.x, 0.5 * size.y)
         ..size = Vector2(35, 35)
         ..starStatus = StarStatus.fixed
-        ..mass = 300000.0
+        ..mass = 9000.0
         ..color = Colors.yellow,
     );
 
-    add(
-      StarComponent()
-        ..position = Vector2(0.5 * size.x, 0.70 * size.y)
-        ..size = Vector2(35, 35)
-        ..starStatus = StarStatus.fixed
-        ..mass = 300000.0
-        ..color = Colors.yellow,
-    );
+    // add(
+    //   StarComponent()
+    //     ..position = Vector2(0.5 * size.x, 0.70 * size.y)
+    //     ..size = Vector2(35, 35)
+    //     ..starStatus = StarStatus.fixed
+    //     ..mass = 300000.0
+    //     ..color = Colors.yellow,
+    // );
 
     // add(
     //   StarComponent()

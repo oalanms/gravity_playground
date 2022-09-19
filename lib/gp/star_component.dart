@@ -121,12 +121,12 @@ class StarComponent extends PositionComponent
     }
   }
 
-  double lastFrame = 0;
-
+  // Will call _update with smaller steps of `dt`.
+  // This will help to keep consistency with different playback speeds.
   @override
   void update(double dt) {
     double t = dt;
-    const step = 0.01;
+    const step = 0.005;
     while(t > 0){
       t -= step;
       _update(step);
@@ -146,9 +146,6 @@ class StarComponent extends PositionComponent
     dt *= gameRef.playbackSpeed;
     currentTime += dt;
 
-    if (currentTime - lastFrame < 1 / 1200) return;
-    lastFrame = 0;
-
     if (starStatus == StarStatus.fixed) return;
 
     // Calculate gravity attraction from other stars
@@ -156,11 +153,11 @@ class StarComponent extends PositionComponent
       if (star is! StarComponent || star == this) continue;
 
       final distSquared = position.distanceToSquared(star.position);
-      if (distSquared <= star.size.x + size.x) continue;
+      if (distSquared <= 1) continue;
 
       final attractionDirection = (star.position - position).normalized();
 
-      const G = 12.8;
+      final G = 512;
       double attractionForce =
           gameRef.attraction * G * (mass * star.mass) / (distSquared);
 
