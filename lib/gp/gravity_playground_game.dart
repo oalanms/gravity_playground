@@ -17,7 +17,7 @@ class GravityPlaygroundGame extends FlameGame
     camera.viewport = FixedResolutionViewport(size);
     add(
       StarComponent()
-        ..position = Vector2(0.25 * size.x, 0.5 * size.y)
+        ..position = Vector2(0.5 * size.x, 0.30 * size.y)
         ..size = Vector2(35, 35)
         ..starStatus = StarStatus.fixed
         ..mass = 300000.0
@@ -26,30 +26,48 @@ class GravityPlaygroundGame extends FlameGame
 
     add(
       StarComponent()
-        ..position = Vector2(0.75 * size.x, 0.5 * size.y)
+        ..position = Vector2(0.5 * size.x, 0.70 * size.y)
         ..size = Vector2(35, 35)
         ..starStatus = StarStatus.fixed
         ..mass = 300000.0
         ..color = Colors.yellow,
     );
 
-    add(
-      StarComponent()
-        ..position = Vector2(0.5 * size.x, 0.35 * size.y)
-        ..size = Vector2(35, 35)
-        ..starStatus = StarStatus.fixed
-        ..mass = 300000.0
-        ..color = Colors.yellow,
-    );
+    // add(
+    //   StarComponent()
+    //     ..position = Vector2(0.25 * size.x, 0.5 * size.y)
+    //     ..size = Vector2(35, 35)
+    //     ..starStatus = StarStatus.fixed
+    //     ..mass = 300000.0
+    //     ..color = Colors.yellow,
+    // );
 
-    add(
-      StarComponent()
-        ..position = Vector2(0.5 * size.x, 0.65 * size.y)
-        ..size = Vector2(35, 35)
-        ..starStatus = StarStatus.fixed
-        ..mass = 300000.0
-        ..color = Colors.yellow,
-    );
+    // add(
+    //   StarComponent()
+    //     ..position = Vector2(0.75 * size.x, 0.5 * size.y)
+    //     ..size = Vector2(35, 35)
+    //     ..starStatus = StarStatus.fixed
+    //     ..mass = 300000.0
+    //     ..color = Colors.yellow,
+    // );
+
+    // add(
+    //   StarComponent()
+    //     ..position = Vector2(0.5 * size.x, 0.35 * size.y)
+    //     ..size = Vector2(35, 35)
+    //     ..starStatus = StarStatus.fixed
+    //     ..mass = 300000.0
+    //     ..color = Colors.yellow,
+    // );
+
+    // add(
+    //   StarComponent()
+    //     ..position = Vector2(0.5 * size.x, 0.65 * size.y)
+    //     ..size = Vector2(35, 35)
+    //     ..starStatus = StarStatus.fixed
+    //     ..mass = 300000.0
+    //     ..color = Colors.yellow,
+    // );
 
     return super.onLoad();
   }

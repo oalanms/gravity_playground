@@ -49,7 +49,7 @@ class StarComponent extends PositionComponent
 
     _hitbox = CircleHitbox(
       position: Vector2.zero(),
-      radius: size.x / 1.75,
+      radius: size.x / 1.95,
     );
 
     add(_hitbox!);
@@ -66,7 +66,7 @@ class StarComponent extends PositionComponent
     // Debris collided with another star
     if (starStatus == StarStatus.debris) {
       other.mass += mass;
-      other.size += size * 0.01;
+      other.size += size * 0.001;
 
       other._addOrUpdateHitbox();
       removeFromParent();
@@ -145,7 +145,7 @@ class StarComponent extends PositionComponent
       if (star is! StarComponent || star == this) continue;
 
       final distSquared = position.distanceToSquared(star.position);
-      if (distSquared <= star.size.x * size.x) continue;
+      if (distSquared <= star.size.x + size.x) continue;
 
       final attractionDirection = (star.position - position).normalized();
 
