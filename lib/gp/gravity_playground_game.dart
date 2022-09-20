@@ -96,5 +96,18 @@ class GravityPlaygroundGame extends FlameGame
         paint,
       );
     }
+
+    double side = 0.05 * size.x;
+    int rows = size.y ~/ side;
+    int cols = size.x ~/ side;
+
+    Paint gridPaint = Paint()..color = Colors.white.withOpacity(0.2);
+    for (int i = 0; i < rows; i++) {
+      canvas.drawLine(Offset(0, i * side), Offset(size.x, i * side), gridPaint);
+    }
+
+    for (int i = 0; i < cols; i++) {
+      canvas.drawLine(Offset(i * side, 0), Offset(i * side, size.y), gridPaint);
+    }
   }
 }

@@ -140,7 +140,7 @@ class StarComponent extends PositionComponent
   @override
   void update(double dt) {
     double t = dt;
-    const step = 0.005;
+    const step = 0.008;
     while (t > 0) {
       t -= step;
       _update(step);
