@@ -140,10 +140,21 @@ class StarComponent extends PositionComponent
   @override
   void update(double dt) {
     double t = dt;
-    const step = 0.008;
+    const step = 0.016;
     while (t > 0) {
       t -= step;
       _update(step);
+    }
+
+    // Only free-roaming stars have a tail
+    if (starStatus == StarStatus.free) {
+      final tailItem = TailItem(Vector2(position.x, position.y), currentTime);
+      tail.add(tailItem);
+
+      // Keep tail to the last 2 seconds
+      while (tail.isNotEmpty && tail.first.timestamp < currentTime - 2) {
+        tail.removeAt(0);
+      }
     }
 
     super.update(dt);
@@ -180,16 +191,6 @@ class StarComponent extends PositionComponent
       speed += attractionDirection * attractionForce * dt;
     }
 
-    // Only free-roaming stars have a tail
-    if (starStatus == StarStatus.free) {
-      final tailItem = TailItem(Vector2(position.x, position.y), currentTime);
-      tail.add(tailItem);
-
-      // Keep tail to the last 2 seconds
-      while (tail.isNotEmpty && tail.first.timestamp < currentTime - 2) {
-        tail.removeAt(0);
-      }
-    }
 
     // Apply speed
     position += speed * dt;
