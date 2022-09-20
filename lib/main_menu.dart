@@ -1,5 +1,7 @@
+import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:gravity_playground/gp/gravity_playground_game.dart';
+import 'package:gravity_playground/gp/scenes.dart';
 
 class MainMenu extends StatefulWidget {
   final GravityPlaygroundGame game;
@@ -49,19 +51,45 @@ class MainMenuState extends State<MainMenu> {
               Expanded(
                 child: MenuItem(
                   header: "Playback Control",
-                  body: GestureDetector(
-                    onTap: _togglePaused,
-                    child: Icon(
-                      _paused ? Icons.play_arrow : Icons.pause_sharp,
-                      color: Colors.white,
-                    ),
+                  body: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      GestureDetector(
+                        onTap: _togglePaused,
+                        child: Icon(
+                          _paused ? Icons.play_arrow : Icons.pause_sharp,
+                          color: Colors.white,
+                        ),
+                      ),
+                      ...List.generate(
+                        Scenes.allScenes(Vector2.zero()).length,
+                        (index) => Container(
+                          padding: const EdgeInsets.all(2.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                widget.game.selectedScene = index;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  index == widget.game.selectedScene
+                                      ? Colors.indigo
+                                      : Colors.grey,
+                            ),
+                            child: Text("S$index"),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
               const VerticalDivider(width: 1, color: Colors.white),
               Expanded(
                 child: MenuItem(
-                  header: "Playback Speed: ${widget.game.playbackSpeed.toStringAsFixed(2)}",
+                  header:
+                      "Playback Speed: ${widget.game.playbackSpeed.toStringAsFixed(2)}",
                   body: Slider(
                     value: widget.game.playbackSpeed,
                     label: "Playback: ${widget.game.playbackSpeed}x",
@@ -79,7 +107,8 @@ class MainMenuState extends State<MainMenu> {
               const VerticalDivider(width: 1, color: Colors.white),
               Expanded(
                 child: MenuItem(
-                  header: "Gravity Force ${widget.game.attraction.toStringAsFixed(2)}",
+                  header:
+                      "Gravity Force ${widget.game.attraction.toStringAsFixed(2)}",
                   body: Slider(
                     value: widget.game.attraction,
                     label: "Force: ${widget.game.attraction}x",
@@ -127,7 +156,8 @@ class MenuItem extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          body,
+          // TODO: Remove hardcoded value
+          Container(height: 50, child: body),
         ],
       ),
     );

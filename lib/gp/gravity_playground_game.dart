@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
+import 'package:gravity_playground/gp/scenes.dart';
 import 'package:gravity_playground/gp/star_component.dart';
 
 class GravityPlaygroundGame extends FlameGame
@@ -11,65 +12,28 @@ class GravityPlaygroundGame extends FlameGame
   double attraction = 1.0;
   double playbackSpeed = 1.0;
 
+  int _selectedScene = 1;
+  int get selectedScene => _selectedScene;
+  set selectedScene(int value) {
+    _selectedScene = value % Scenes.allScenes(size).length;
+    _loadScene();
+  }
+
   @override
   Future<void>? onLoad() {
     // debugMode = true;
     camera.viewport = FixedResolutionViewport(size);
-    add(
-      StarComponent()
-        ..position = Vector2(0.5 * size.x, 0.5 * size.y)
-        ..size = Vector2(35, 35)
-        ..starStatus = StarStatus.fixed
-        ..mass = 9000.0
-        ..color = Colors.yellow,
-    );
-
-    // add(
-    //   StarComponent()
-    //     ..position = Vector2(0.5 * size.x, 0.70 * size.y)
-    //     ..size = Vector2(35, 35)
-    //     ..starStatus = StarStatus.fixed
-    //     ..mass = 300000.0
-    //     ..color = Colors.yellow,
-    // );
-
-    // add(
-    //   StarComponent()
-    //     ..position = Vector2(0.25 * size.x, 0.5 * size.y)
-    //     ..size = Vector2(35, 35)
-    //     ..starStatus = StarStatus.fixed
-    //     ..mass = 300000.0
-    //     ..color = Colors.yellow,
-    // );
-
-    // add(
-    //   StarComponent()
-    //     ..position = Vector2(0.75 * size.x, 0.5 * size.y)
-    //     ..size = Vector2(35, 35)
-    //     ..starStatus = StarStatus.fixed
-    //     ..mass = 300000.0
-    //     ..color = Colors.yellow,
-    // );
-
-    // add(
-    //   StarComponent()
-    //     ..position = Vector2(0.5 * size.x, 0.35 * size.y)
-    //     ..size = Vector2(35, 35)
-    //     ..starStatus = StarStatus.fixed
-    //     ..mass = 300000.0
-    //     ..color = Colors.yellow,
-    // );
-
-    // add(
-    //   StarComponent()
-    //     ..position = Vector2(0.5 * size.x, 0.65 * size.y)
-    //     ..size = Vector2(35, 35)
-    //     ..starStatus = StarStatus.fixed
-    //     ..mass = 300000.0
-    //     ..color = Colors.yellow,
-    // );
-
+    _loadScene();
     return super.onLoad();
+  }
+
+  void _loadScene() {
+    // TODO: better way to remove all children?
+    for (var c in children) {
+      c.removeFromParent();
+    }
+    children.removeWhere((_) => true);
+    addAll(Scenes.allScenes(size)[_selectedScene]);
   }
 
   @override

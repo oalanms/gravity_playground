@@ -46,7 +46,10 @@ class HomePageState extends State<HomePage> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: MainMenu(game: _game),
+            child: Container(
+              height: 80,
+              child: MainMenu(game: _game),
+            ),
           ),
         ],
       ),

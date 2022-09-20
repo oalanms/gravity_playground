@@ -5,6 +5,8 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:gravity_playground/gp/gravity_playground_game.dart';
 
+int initialId = 1;
+
 class TailItem {
   final Vector2 position;
   final double timestamp;
@@ -17,6 +19,8 @@ enum StarStatus { fixed, free, debris }
 class StarComponent extends PositionComponent
     with HasGameRef<GravityPlaygroundGame>, CollisionCallbacks {
   double currentTime = 0.0;
+
+  final _componentId = initialId++;
 
   // Current star speed
   Vector2 speed = Vector2.zero();
@@ -56,9 +60,18 @@ class StarComponent extends PositionComponent
   }
 
   @override
+  void onRemove() {
+    if (_hitbox != null) {
+      _hitbox!.removeFromParent();
+    }
+    super.onRemove();
+  }
+
+  @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if (starStatus == StarStatus.fixed ||
+    if (parent == null ||
+        starStatus == StarStatus.fixed ||
         other is! StarComponent ||
         other.starStatus == StarStatus.debris ||
         other.parent == null) return;
@@ -68,6 +81,7 @@ class StarComponent extends PositionComponent
       other.mass += mass;
       other.size += size * 0.001;
 
+      _hitbox!.removeFromParent();
       other._addOrUpdateHitbox();
       removeFromParent();
       return;
@@ -127,7 +141,7 @@ class StarComponent extends PositionComponent
   void update(double dt) {
     double t = dt;
     const step = 0.005;
-    while(t > 0){
+    while (t > 0) {
       t -= step;
       _update(step);
     }
@@ -135,7 +149,7 @@ class StarComponent extends PositionComponent
     super.update(dt);
   }
 
-  void _update(double dt){
+  void _update(double dt) {
     // TODO: Check distance to the center instead of to (0,0)
     if (position.distanceTo(Vector2.zero()) >
         2 * (gameRef.size.x + gameRef.size.y)) {
@@ -183,6 +197,15 @@ class StarComponent extends PositionComponent
 
   @override
   void render(Canvas canvas) {
+    // For debug purposes
+    // TextPaint textPaint = TextPaint(
+    //   style: const TextStyle(
+    //     color: Colors.white,
+    //   ),
+    // );
+
+    // textPaint.render(canvas, "$mid", Vector2(30, 30));
+
     final paint = Paint()..color = color;
 
     for (int i = 0; i < tail.length - 1; i++) {
@@ -204,5 +227,13 @@ class StarComponent extends PositionComponent
       ),
       paint,
     );
+  }
+
+  @override
+  void removeFromParent() {
+    if (_hitbox != null) {
+      _hitbox!.removeFromParent();
+    }
+    super.removeFromParent();
   }
 }
