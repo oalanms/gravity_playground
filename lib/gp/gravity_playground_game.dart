@@ -12,6 +12,8 @@ class GravityPlaygroundGame extends FlameGame
   double attraction = 1.0;
   double playbackSpeed = 1.0;
 
+  List<StarComponent> frees = [];
+
   int _selectedScene = 1;
   int get selectedScene => _selectedScene;
   set selectedScene(int value) {
@@ -57,6 +59,7 @@ class GravityPlaygroundGame extends FlameGame
   @override
   void onPanCancel() {
     add(_newStar!);
+    frees.add(_newStar!);
     _newStar = null;
     super.onPanCancel();
   }
@@ -64,6 +67,7 @@ class GravityPlaygroundGame extends FlameGame
   @override
   void onPanEnd(DragEndInfo info) {
     add(_newStar!);
+    frees.add(_newStar!);
     _newStar = null;
     super.onPanEnd(info);
   }

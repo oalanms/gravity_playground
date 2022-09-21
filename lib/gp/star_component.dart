@@ -140,7 +140,7 @@ class StarComponent extends PositionComponent
   @override
   void update(double dt) {
     double t = dt;
-    const step = 0.016;
+    const step = 0.0016;
     while (t > 0) {
       t -= step;
       _update(step);
@@ -186,7 +186,7 @@ class StarComponent extends PositionComponent
       double attractionForce =
           gameRef.attraction * G * (mass * star.mass) / (distSquared);
 
-      // attractionForce = max(0.0000001, min(attractionForce, 10000 * gameRef.size.y + gameRef.size.x));
+      attractionForce = min(attractionForce, 3 * (gameRef.size.x + gameRef.size.y));
 
       speed += attractionDirection * attractionForce * dt;
     }
